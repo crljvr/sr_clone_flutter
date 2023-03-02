@@ -1,0 +1,40 @@
+name: sr_clone_flutter
+description: A new Flutter project.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.19.2 <3.0.0"
+
+dependencies:
+  cupertino_icons: ^1.0.2
+  dio: ^5.0.1
+  flutter:
+    sdk: flutter
+  get_it: ^7.2.0
+  go_router: ^6.2.0
+  just_audio: ^0.9.31
+  rxdart: ^0.27.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  very_good_analysis: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/fonts/
+    - assets/images/
+  fonts:
+    - family: Source Sans Pro
+      fonts:
+        - asset: assets/fonts/SourceSansPro-Regular.ttf
+        - asset: assets/fonts/SourceSansPro-Bold.ttf
+          weight: 700
+    - family: Avenir Heavy
+      fonts:
+        - asset: assets/fonts/Avenir-Heavy-05.ttf
