@@ -1,3 +1,5 @@
+![alt text](https://github.com/crljvr/sr_clone_flutter/blob/main/assets/images/banner.png?raw=true)
+
 # sr_clone_flutter
 
 A clone of SR Play using Flutter
