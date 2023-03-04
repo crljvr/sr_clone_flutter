@@ -1,7 +1,7 @@
-import 'package:sr_clone_flutter/domain/entities/episode.dart';
+import 'package:sr_clone_flutter/domain/entities/podcast.dart';
 
-class EpisodeDto {
-  const EpisodeDto._({
+class PodcastDto {
+  const PodcastDto._({
     required this.description,
     required this.imageUrl,
     required this.audioUrl,
@@ -13,11 +13,11 @@ class EpisodeDto {
     required this.name,
   });
 
-  factory EpisodeDto.fromJson(Map<String, dynamic> json) {
+  factory PodcastDto.fromJson(Map<String, dynamic> json) {
     final episodeWrapper = json['episode'] as Map<String, dynamic>;
     final podfileWrapper = episodeWrapper['listenpodfile']! as Map<String, dynamic>;
 
-    return EpisodeDto._(
+    return PodcastDto._(
       audioUrl: podfileWrapper['url']! as String,
       description: episodeWrapper['description']! as String,
       duration: podfileWrapper['duration']! as int,
@@ -31,8 +31,8 @@ class EpisodeDto {
   }
 
   /// Getter to convert DTO as Entity
-  Episode get asEpisode {
-    return Episode(
+  Podcast get asPodcast {
+    return Podcast(
       name: name,
       description: description,
       imageUrl: imageUrl,

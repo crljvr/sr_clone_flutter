@@ -9,6 +9,7 @@ environment:
   sdk: ">=2.19.2 <3.0.0"
 
 dependencies:
+  connectivity_plus: ^3.0.3
   cupertino_icons: ^1.0.2
   dio: ^5.0.1
   flutter:

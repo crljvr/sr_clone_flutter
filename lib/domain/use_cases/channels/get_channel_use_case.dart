@@ -9,7 +9,7 @@ class GetChannelUseCase implements UseCase<Future<Channel>, String> {
   final ChannelsRepository channelsRepository;
 
   @override
-  Future<Channel> call(String channelId) async {
+  Future<Channel> call<NoGeneric>(String channelId) async {
     final result = await channelsRepository.getChannel(channelId);
     if (result is GetChannelSuccessful) return result.channel;
     if (result is GetChannelFailure) {

@@ -7,7 +7,7 @@ class PauseAudioUseCase implements UseCase<Future<void>, NoParams> {
   final MediaPlayer mediaPlayer;
 
   @override
-  Future<void> call(NoParams params) async {
+  Future<void> call<NoGeneric>(NoParams params) async {
     await mediaPlayer.pause();
   }
 }

@@ -22,14 +22,15 @@ class PlayerViewModel extends ChangeNotifier {
 
   Stream<bool> get isPlaying => _mediaPlayer.isPlaying;
 
+  // TODO: The current playable needs to be a Stream to work correctly
   Playable? get playable => _mediaPlayer.playable;
 
   Future<void> playAudio() async {
-    await _playAudioUseCase.call(NoParams());
+    await _playAudioUseCase.call<NoGeneric>(NoParams());
   }
 
   Future<void> pauseAudio() async {
-    await _pauseAudioUseCase.call(NoParams());
+    await _pauseAudioUseCase.call<NoGeneric>(NoParams());
   }
 }
 
@@ -135,10 +136,6 @@ class _PlayerWithPlayable extends StatelessWidget {
                     Text(
                       playable.name,
                       style: const TextStyle(color: SRColors.primaryForeground, fontSize: 14, fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      playable.description,
-                      style: const TextStyle(color: SRColors.primaryForeground, fontSize: 10, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),

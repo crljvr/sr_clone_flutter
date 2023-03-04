@@ -8,7 +8,7 @@ class LoadAudioUseCase implements UseCase<Future<void>, Playable> {
   final MediaPlayer audioPlayer;
 
   @override
-  Future<void> call(Playable playable) async {
+  Future<void> call<NoGeneric>(Playable playable) async {
     await audioPlayer.load(playable);
   }
 }
