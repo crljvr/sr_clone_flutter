@@ -18,7 +18,7 @@ This app has no intentions of being published. It only serves as an example of h
 
 ### Todos
 
-* Style the bottom navigation bar and set correct routes
+* ~~Style the bottom navigation bar and set correct routes~~
 * Refactor `MediaPlayer` and `NetworkManager` to be proper modules to make use of [melos](https://github.com/invertase/melos)
 * Details page for featured episode
 * Create a `UI Components` module and add [Widgetbook](https://github.com/widgetbook/widgetbook) 
