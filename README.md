@@ -16,4 +16,23 @@ It is an attempt to recreate the design and user experience of SR Play, a radio
 
 This app has no intentions of being published. It only serves as an example of how to structure a Flutter app.
 
+### Todos
 
+* Style the bottom navigation bar and set correct routes
+* Refactor `MediaPlayer` and `NetworkManager` to be proper modules to make use of [melos](https://github.com/invertase/melos)
+* Details page for featured episode
+* Create a `UI Components` module and add [Widgetbook](https://github.com/widgetbook/widgetbook) 
+* Write tests for modules and domain layer.
+* More error handling
+
+___
+
+### Progress as of 2-3-2023
+
+* Fetches and displays channels
+* Plays/pauses a channel live audio
+* Fetches and displays featured episode
+
+| SR Play       | Flutter clone |
+| ------------- | ------------- |
+| ![alt text](https://github.com/crljvr/sr_clone_flutter/blob/main/assets/gifs/sr_play.gif?raw=true)      | ![alt text](https://github.com/crljvr/sr_clone_flutter/blob/main/assets/gifs/clone.gif?raw=true) |
