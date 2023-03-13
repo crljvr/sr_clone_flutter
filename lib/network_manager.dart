@@ -14,10 +14,9 @@ class Endpoint {
   });
 
   final String path;
-  final Map<String, String>? queryParameters;
+  final Map<String, Object>? queryParameters;
 }
 
-// ignore: one_member_abstracts
 abstract class NetworkManager {
   Future<Map<String, dynamic>> get(Endpoint endpoint);
   Future<Map<String, dynamic>> post(Endpoint endpoint);

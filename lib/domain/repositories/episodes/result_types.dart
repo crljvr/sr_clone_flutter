@@ -1,16 +1,16 @@
-import 'package:sr_clone_flutter/domain/entities/news_episode.dart';
+import 'package:sr_clone_flutter/domain/entities/episode.dart';
 
-abstract class GetNewsEpisodesReslut {}
+abstract class GetEpisodesReslut {}
 
-class GetNewsEpisodesSuccessful implements GetNewsEpisodesReslut {
-  const GetNewsEpisodesSuccessful(this.episodes);
-  final List<NewsEpisode> episodes;
+class GetEpisodesSuccessful implements GetEpisodesReslut {
+  const GetEpisodesSuccessful(this.episodes);
+  final List<Episode> episodes;
 }
 
-class GetNewsEpisodesFailure implements GetNewsEpisodesReslut {
-  const GetNewsEpisodesFailure(this.reason);
-  final GetNewsEpisodesFailureReason reason;
+class GetEpisodesFailure implements GetEpisodesReslut {
+  const GetEpisodesFailure(this.reason);
+  final GetEpisodesFailureReason reason;
 }
 
 // TODO: Make this usable for all result types. Remove duplication.
-enum GetNewsEpisodesFailureReason { networkFailure, unknown }
+enum GetEpisodesFailureReason { networkFailure, unknown }

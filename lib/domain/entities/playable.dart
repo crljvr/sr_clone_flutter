@@ -1,5 +1,10 @@
 abstract class Playable {
-  String get imageUrl;
   String get audioUrl;
-  String get name;
+}
+
+class OnAirPlayable implements Playable {
+  const OnAirPlayable(this.audioUrl);
+
+  @override
+  final String audioUrl;
 }

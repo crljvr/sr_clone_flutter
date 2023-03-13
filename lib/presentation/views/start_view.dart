@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sr_clone_flutter/domain/entities/channel.dart';
 import 'package:sr_clone_flutter/domain/entities/playlist.dart';
 import 'package:sr_clone_flutter/domain/entities/podcast.dart';
 import 'package:sr_clone_flutter/presentation/colors.dart';
+import 'package:sr_clone_flutter/presentation/components/player/player.dart';
 import 'package:sr_clone_flutter/presentation/constants.dart';
 import 'package:sr_clone_flutter/presentation/view_models/start_view_model.dart';
 
@@ -33,17 +35,20 @@ class _StartViewState extends State<StartView> {
                     size: size,
                     channelId: widget.viewModel.channelIds[index],
                     getChannelFuture: widget.viewModel.getChannel,
+                    // onTap: widget.viewModel.playChannelAudio,
                     onTap: widget.viewModel.playChannelAudio,
                   );
                 },
               ),
-              _Playlists(
+              _NewsPlaylistCarousel(
                 getPlaylistFuture: widget.viewModel.getPlaylist,
+                newsChannelIds: widget.viewModel.newsChannelIds,
               ),
               _FeaturedPodcast(
                 getPodcastFuture: widget.viewModel.getPodcast,
                 podcastId: widget.viewModel.featuredEpisodeId,
               ),
+              const SliverToBoxAdapter(child: SizedBox(height: Player.miniPlayerHeight)),
             ],
           ),
         ),
@@ -213,7 +218,7 @@ class _FeaturedPodcastState extends State<_FeaturedPodcast> {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: SRConstants.spacing1, vertical: SRConstants.spacing4),
         child: AspectRatio(
           aspectRatio: 5 / 4,
           child: FutureBuilder(
@@ -282,19 +287,44 @@ class _FeaturedPodcastState extends State<_FeaturedPodcast> {
   }
 }
 
-class _Playlists extends StatelessWidget {
-  const _Playlists({
+class _NewsPlaylistCarousel extends StatelessWidget {
+  const _NewsPlaylistCarousel({
     required this.getPlaylistFuture,
+    required this.newsChannelIds,
   });
 
   final Future<Playlist> Function(String) getPlaylistFuture;
+  final List<String> newsChannelIds;
 
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: _PlaylistCard(
-        programId: '103',
-        getPlaylistFuture: getPlaylistFuture,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: SRConstants.spacing1, vertical: SRConstants.spacing4),
+        child: SizedBox(
+          height: 300,
+          // Could not go for ListView since it delocates cells that are out of view.
+          // This caused scrolling back only got to one cell no matter how far you have scrolled.
+          // Since the amout of cells will not be that many, the performance loss wont be that significant.
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ...newsChannelIds.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final id = entry.value;
+                  return Padding(
+                    padding: EdgeInsets.only(right: index != newsChannelIds.length - 1 ? SRConstants.spacing3 : 0),
+                    child: _PlaylistCard(
+                      programId: id,
+                      getPlaylistFuture: getPlaylistFuture,
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -329,10 +359,116 @@ class __PlaylistCardState extends State<_PlaylistCard> {
       future: _getPlaylistFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-          return Container(
-            color: Colors.pink,
-            height: 100,
-            width: 100,
+          final playlist = snapshot.data!;
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(SRConstants.spacing2),
+            child: Container(
+              width: MediaQuery.of(context).size.width * .8,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    playlist.episodes.first.imageUrl,
+                  ),
+                ),
+              ),
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          SRColors.primaryBackground.withOpacity(.1),
+                          SRColors.primaryBackground.withOpacity(.4),
+                          SRColors.primaryBackground,
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(SRConstants.spacing4),
+                      color: SRColors.primaryForeground,
+                      child: Row(
+                        children: [
+                          ClipOval(
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 42,
+                              width: 42,
+                              color: SRColors.primaryBackground,
+                              child: const Icon(
+                                CupertinoIcons.play_fill,
+                                color: SRColors.primaryForeground,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: SRConstants.spacing4),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                playlist.title,
+                                style: const TextStyle(
+                                  color: SRColors.primaryBackground,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const SizedBox(height: SRConstants.spacing1),
+                              Text(
+                                '${playlist.episodes.length} nyheter',
+                                style: const TextStyle(
+                                  color: SRColors.primaryBackground,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(SRConstants.spacing4),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Lokala nyheter'.toUpperCase(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                                color: SRColors.primaryHighlight,
+                              ),
+                            ),
+                            const SizedBox(height: SRConstants.spacing3),
+                            Text(
+                              playlist.episodes.first.description,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: SRColors.primaryForeground,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ))
+                ],
+              ),
+            ),
           );
         }
         return const SizedBox();

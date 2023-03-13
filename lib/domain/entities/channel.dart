@@ -1,21 +1,19 @@
-import 'package:sr_clone_flutter/domain/entities/playable.dart';
+import 'package:flutter/widgets.dart';
 
-class Channel implements Playable {
+class Channel {
   const Channel({
+    required this.id,
     required this.name,
     required this.imageUrl,
-    required this.audioUrl,
+    required this.color,
+    required this.tagline,
+    required this.liveAudioUrl,
   });
 
-  @override
+  final int id;
   final String name;
-
-  @override
   final String imageUrl;
-
-  @override
-  final String audioUrl;
-
-  @override
-  String get description => 'TBA';
+  final Color color;
+  final String tagline;
+  final String liveAudioUrl;
 }

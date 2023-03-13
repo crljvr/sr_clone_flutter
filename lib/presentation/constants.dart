@@ -13,4 +13,7 @@ class SRConstants {
 
   /// Spacing of 20 px
   static const double spacing5 = 20;
+
+  /// The height of the bottom navigation bar
+  static const double bottomNavigationBarHeight = 86;
 }

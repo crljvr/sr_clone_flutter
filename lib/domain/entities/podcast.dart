@@ -1,7 +1,7 @@
-import 'package:sr_clone_flutter/domain/entities/episode.dart';
+import 'package:sr_clone_flutter/domain/entities/playable.dart';
 
-class Podcast implements Episode {
-  const Podcast({
+class Podcast implements Playable {
+  Podcast({
     required this.name,
     required this.description,
     required this.imageUrl,
@@ -18,25 +18,22 @@ class Podcast implements Episode {
   final String audioUrl;
 
   /// The description of the podcast
-  @override
   final String description;
 
   /// The cover image for the podcast
-  @override
   final String imageUrl;
 
   /// The name of the podcast
-  @override
   final String name;
+
+  /// The name of the show
+  final String showName;
 
   /// The description of the show
   final String text;
 
   /// The size of the playable podcast
   final int fileSizeInBytes;
-
-  /// The name of the show
-  final String showName;
 
   /// The date when the podcast was published
   final String publishedDate;

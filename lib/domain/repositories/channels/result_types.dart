@@ -1,4 +1,5 @@
 import 'package:sr_clone_flutter/domain/entities/channel.dart';
+import 'package:sr_clone_flutter/domain/entities/schedule_item.dart';
 
 abstract class GetChannelResult {}
 
@@ -13,3 +14,19 @@ class GetChannelFailure implements GetChannelResult {
 }
 
 enum GetChannelFailureReason { networkFailure, unknown }
+
+// ============================================= //
+
+abstract class GetScheduleResult {}
+
+class GetScheduleSuccessful implements GetScheduleResult {
+  const GetScheduleSuccessful(this.scheduleItems);
+  final List<ScheduleItem> scheduleItems;
+}
+
+class GetScheduleFailure implements GetScheduleResult {
+  const GetScheduleFailure(this.reason);
+  final GetScheduleFailureReason reason;
+}
+
+enum GetScheduleFailureReason { networkFailure, unknown }

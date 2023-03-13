@@ -1,7 +1,9 @@
 import 'package:sr_clone_flutter/data/data/datasource.dart';
 import 'package:sr_clone_flutter/data/dtos/channel_dto.dart';
-import 'package:sr_clone_flutter/data/dtos/news_episode_dto.dart';
+import 'package:sr_clone_flutter/data/dtos/episode_dto.dart';
 import 'package:sr_clone_flutter/data/dtos/podcast_dto.dart';
+import 'package:sr_clone_flutter/data/dtos/schedule_item_dto.dart';
+import 'package:sr_clone_flutter/domain/entities/program.dart';
 import 'package:sr_clone_flutter/network_manager.dart';
 
 class OpenApiDatasource implements Datasource {
@@ -41,7 +43,7 @@ class OpenApiDatasource implements Datasource {
   }
 
   @override
-  Future<List<NewsEpisodeDto>> getNewsEpisodes(String programId) async {
+  Future<List<EpisodeDto>> getEpisodes(String programId) async {
     const path = 'https://api.sr.se/api/v2/episodes/index';
     final queryParameters = {
       'programid': programId,
@@ -49,17 +51,64 @@ class OpenApiDatasource implements Datasource {
     };
     final endpoint = Endpoint(path: path, queryParameters: queryParameters);
 
-    //TODO: SERIALIZATION IS WRONG.
-
     try {
       final data = await _networkManager.get(endpoint);
       final json = data['episodes']! as List<dynamic>;
       return json.map((value) {
         final jsonValue = value as Map<String, dynamic>;
-        return NewsEpisodeDto.fromJson(jsonValue);
+        return EpisodeDto.fromJson(jsonValue);
       }).toList();
     } catch (e) {
-      throw UnableToGetNewsEpisodesFromDatasourceException();
+      throw UnableToGetEpisodesFromDatasourceException();
+    }
+  }
+
+  @override
+  Future<List<ScheduleItemDto>> getSchedule(String channelId, String formattedDate) async {
+    const path = 'http://api.sr.se/api/v2/scheduledepisodes';
+    final queryParameters = {
+      'channelid': channelId,
+      'date': formattedDate,
+      'pagination': false,
+      'format': 'json',
+    };
+    final endpoint = Endpoint(path: path, queryParameters: queryParameters);
+
+    try {
+      final data = await _networkManager.get(endpoint);
+      final json = data['schedule']! as List<dynamic>;
+      return json.map((value) {
+        final jsonValue = value as Map<String, dynamic>;
+        return ScheduleItemDto.fromJson(jsonValue);
+      }).toList();
+    } catch (e) {
+      throw UnableToGetEpisodesFromDatasourceException();
+    }
+  }
+
+  static DateTime formatToDateTime(String apiDate) {
+    final string = apiDate;
+    final splitFirst = string.split('(');
+    final splitSecond = splitFirst[1].split(')');
+    final unix = int.parse(splitSecond[0]);
+
+    return DateTime.fromMillisecondsSinceEpoch(unix);
+  }
+
+  @override
+  Future<ProgramDto> getProgram(String programId) async {
+    final path = 'http://api.sr.se/api/v2/programs/$programId';
+    final queryParameters = {
+      'format': 'json',
+    };
+    final endpoint = Endpoint(path: path, queryParameters: queryParameters);
+
+    try {
+      final data = await _networkManager.get(endpoint);
+      final json = data['program']! as Map<String, dynamic>;
+      return ProgramDto.fromJson(json);
+    } catch (e) {
+      throw UnableToGetEpisodesFromDatasourceException();
     }
   }
 }

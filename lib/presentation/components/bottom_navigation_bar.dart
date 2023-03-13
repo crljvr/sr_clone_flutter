@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sr_clone_flutter/presentation/colors.dart';
-import 'package:sr_clone_flutter/presentation/components/player.dart';
+import 'package:sr_clone_flutter/presentation/components/player/player.dart';
+import 'package:sr_clone_flutter/presentation/components/player/player_content.dart';
+import 'package:sr_clone_flutter/presentation/constants.dart';
+import 'package:sr_clone_flutter/presentation/providers/player_expanded_progression_provider.dart';
 
 const tabs = [
   TabItem(
@@ -39,10 +43,12 @@ const tabs = [
 
 class ContentViewWithBottomNavigation extends StatefulWidget {
   const ContentViewWithBottomNavigation({
+    required this.initialPlayerContent,
     required this.child,
     super.key,
   });
 
+  final PlayerContent initialPlayerContent;
   final Widget child;
 
   @override
@@ -66,36 +72,52 @@ class _ContentViewWithBottomNavigationState extends State<ContentViewWithBottomN
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          widget.child,
-          Player(viewModel: PlayerViewModel()),
-        ],
-      ),
-      // Has to be Container to take affect, DecoratedBox wont apply.
-      // ignore: use_decorated_box
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: SRColors.primaryForeground.withOpacity(.3),
-            ),
-          ),
-        ),
-        // TODO: Handle colors etc. in ThemeData to remove splash color
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: SRColors.primaryBackground,
-          selectedItemColor: SRColors.primaryForeground,
-          selectedFontSize: 11,
-          unselectedFontSize: 11,
-          unselectedItemColor: SRColors.primaryForeground.withOpacity(.5),
-          currentIndex: _currentIndex,
-          items: tabs,
-          onTap: (index) => _onItemTapped(context, index),
-        ),
-      ),
+    return Consumer(
+      builder: (context, ref, oldWidget) {
+        final playerRef = ref.watch(playerExpandedProgressionProvider);
+        return playerRef.maybeWhen(
+            orElse: SizedBox.new,
+            data: (progression) {
+              return Scaffold(
+                backgroundColor: SRColors.primaryBackground,
+                body: Stack(
+                  children: [
+                    widget.child,
+                    Player(viewModel: PlayerViewModel(widget.initialPlayerContent)),
+                  ],
+                ),
+                // Has to be Container to take affect, DecoratedBox wont apply.
+                // ignore: use_decorated_box
+                bottomNavigationBar: SizedBox(
+                  height: SRConstants.bottomNavigationBarHeight,
+                  child: Transform.translate(
+                    offset: Offset(0, progression * 86),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                            color: SRColors.primaryForeground.withOpacity(1),
+                          ),
+                        ),
+                      ),
+                      // TODO: Handle colors etc. in ThemeData to remove splash color
+                      child: BottomNavigationBar(
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: SRColors.primaryBackground,
+                        selectedItemColor: SRColors.primaryForeground,
+                        selectedFontSize: 11,
+                        unselectedFontSize: 11,
+                        unselectedItemColor: SRColors.primaryForeground.withOpacity(.5),
+                        currentIndex: _currentIndex,
+                        items: tabs,
+                        onTap: (index) => _onItemTapped(context, index),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            });
+      },
     );
   }
 }
