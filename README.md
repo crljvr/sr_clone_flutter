@@ -21,13 +21,13 @@ This app has no intentions of being published. It only serves as an example of h
 * ~~Style the bottom navigation bar and set correct routes~~
 * Refactor `MediaPlayer` and `NetworkManager` to be proper modules to make use of [melos](https://github.com/invertase/melos)
 * Details page for featured episode
-* Create a `UI Components` module and add [Widgetbook](https://github.com/widgetbook/widgetbook) 
+* ~~Create a `UI Components` module and add [Widgetbook](https://github.com/widgetbook/widgetbook)~~
 * Write tests for modules and domain layer.
 * More error handling
 
 ___
 
-### Progress as of 13-3-2023
+### Progress as of 14-3-2023
 
 The player turned out to be a lot more work than I first thougt.
 It is not perfect and a long term solution is probably a larger redo.
