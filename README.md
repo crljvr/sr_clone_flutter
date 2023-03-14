@@ -27,11 +27,18 @@ This app has no intentions of being published. It only serves as an example of h
 
 ___
 
-### Progress as of 2-3-2023
+### Progress as of 13-3-2023
 
-* Fetches and displays channels
+The player turned out to be a lot more work than I first thougt.
+It is not perfect and a long term solution is probably a larger redo.
+
+Player architecture need a overlook since it messed up a bit of the separation
+between the layers. Fixing that will most likely be the next task.
+Its also time to start moving things to the UI Component Module.
+
+* Fetches and displays channels, programs and episodes
 * Plays/pauses a channel live audio
-* Fetches and displays featured episode
+* Mini and Large player is in place
 
 | SR Play       | Flutter clone |
 | ------------- | ------------- |
