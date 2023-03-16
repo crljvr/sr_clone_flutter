@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sr_clone_flutter/domain/entities/channel.dart';
 import 'package:sr_clone_flutter/domain/entities/playlist.dart';
@@ -7,6 +6,7 @@ import 'package:sr_clone_flutter/presentation/colors.dart';
 import 'package:sr_clone_flutter/presentation/components/player/player.dart';
 import 'package:sr_clone_flutter/presentation/constants.dart';
 import 'package:sr_clone_flutter/presentation/view_models/start_view_model.dart';
+import 'package:ui_components/ui_components.dart';
 
 class StartView extends StatefulWidget {
   const StartView({required this.viewModel, super.key});
@@ -358,120 +358,23 @@ class __PlaylistCardState extends State<_PlaylistCard> {
     return FutureBuilder(
       future: _getPlaylistFuture,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-          final playlist = snapshot.data!;
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(SRConstants.spacing2),
-            child: Container(
-              width: MediaQuery.of(context).size.width * .8,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    playlist.episodes.first.imageUrl,
-                  ),
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          SRColors.primaryBackground.withOpacity(.1),
-                          SRColors.primaryBackground.withOpacity(.4),
-                          SRColors.primaryBackground,
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(SRConstants.spacing4),
-                      color: SRColors.primaryForeground,
-                      child: Row(
-                        children: [
-                          ClipOval(
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 42,
-                              width: 42,
-                              color: SRColors.primaryBackground,
-                              child: const Icon(
-                                CupertinoIcons.play_fill,
-                                color: SRColors.primaryForeground,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: SRConstants.spacing4),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                playlist.title,
-                                style: const TextStyle(
-                                  color: SRColors.primaryBackground,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              const SizedBox(height: SRConstants.spacing1),
-                              Text(
-                                '${playlist.episodes.length} nyheter',
-                                style: const TextStyle(
-                                  color: SRColors.primaryBackground,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(SRConstants.spacing4),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Lokala nyheter'.toUpperCase(),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                                color: SRColors.primaryHighlight,
-                              ),
-                            ),
-                            const SizedBox(height: SRConstants.spacing3),
-                            Text(
-                              playlist.episodes.first.description,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                                color: SRColors.primaryForeground,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ))
-                ],
-              ),
-            ),
-          );
-        }
-        return const SizedBox();
+        final condition = snapshot.connectionState == ConnectionState.done && snapshot.hasData;
+        return AnimatedSwitcher(
+          duration: const Duration(seconds: 1),
+          child: condition
+              ? Builder(
+                  builder: (context) {
+                    final playlist = snapshot.data!;
+                    return SRPlaylistCard.create(
+                      title: playlist.title,
+                      description: playlist.episodes.first.description,
+                      imageUrl: playlist.episodes.first.imageUrl,
+                      numberOfItemsInPlaylist: playlist.episodes.length,
+                    );
+                  },
+                )
+              : SRPlaylistCard.loading(),
+        );
       },
     );
   }

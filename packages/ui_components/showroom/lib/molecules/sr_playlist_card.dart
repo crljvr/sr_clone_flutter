@@ -1,15 +1,17 @@
+import 'package:flutter/widgets.dart';
+import 'package:ui_components/constants.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:widgetbook/widgetbook.dart';
 
-class PlaylistCardComponent extends WidgetbookComponent {
-  PlaylistCardComponent()
+class SRPlaylistCardComponent extends WidgetbookComponent {
+  SRPlaylistCardComponent()
       : super(
           name: 'Playlist Card',
           useCases: [
             WidgetbookUseCase(
-              name: 'Default',
+              name: 'Create',
               builder: (context) {
-                return PlaylistCard(
+                return _presenter(SRPlaylistCard.create(
                   title: context.knobs.text(
                     label: 'Title',
                     description: 'The name of the playlist',
@@ -30,9 +32,20 @@ class PlaylistCardComponent extends WidgetbookComponent {
                     description: 'Number of playable items in the playlist',
                     initialValue: 10,
                   ) as int,
-                );
+                ));
               },
+            ),
+            WidgetbookUseCase(
+              name: 'Loading',
+              builder: (context) => _presenter(SRPlaylistCard.loading()),
             ),
           ],
         );
+
+  static Widget _presenter(Widget child) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(SRConstants.spacing3),
+          child: child,
+        ),
+      );
 }

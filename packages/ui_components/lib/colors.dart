@@ -7,4 +7,7 @@ class SRColors {
   static const Color secodaryBackground = Color(0xff222222);
   static const Color primaryHighlight = Color(0xffffdb00);
   static const Color secodaryHighlight = Color(0xffe62243);
+
+  static const Color primaryLoading = Color(0xff282828);
+  static const Color secondaryLoading = Color(0xff1a1a1a);
 }

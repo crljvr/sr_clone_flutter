@@ -1,4 +1,4 @@
-import 'package:showroom/molecules/playlist_card.dart';
+import 'package:showroom/molecules/sr_playlist_card.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 class Molecules extends WidgetbookCategory {
@@ -6,7 +6,7 @@ class Molecules extends WidgetbookCategory {
       : super(
           name: 'Molecules',
           widgets: [
-            PlaylistCardComponent(),
+            SRPlaylistCardComponent(),
           ],
         );
 }

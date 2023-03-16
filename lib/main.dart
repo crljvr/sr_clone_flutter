@@ -2,7 +2,6 @@ import 'package:flutter/material.dart' hide Router;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sr_clone_flutter/domain/entities/playable.dart';
-import 'package:sr_clone_flutter/domain/repositories/channels/channels_repository.dart';
 import 'package:sr_clone_flutter/domain/use_cases/channels/get_channel_use_case.dart';
 import 'package:sr_clone_flutter/domain/use_cases/channels/get_schedule_use_case.dart';
 import 'package:sr_clone_flutter/domain/use_cases/player/create_player_content_use_case.dart';
@@ -27,6 +26,7 @@ Future<void> main() async {
   );
 }
 
+// TODO: Find a nicer way to preload data to the player than this.
 Future<BootstrapData> bootstrap() async {
   final channel = await GetIt.I<GetChannelUseCase>().call<NoGeneric>('132');
   final scheduleItems = await GetIt.I<GetScheduleUseCase>().call<NoGeneric>(GetScheduleParams('132', DateTime.now()));
