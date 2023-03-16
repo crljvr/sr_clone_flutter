@@ -43,3 +43,13 @@ Its also time to start moving things to the UI Component Module.
 | SR Play       | Flutter clone |
 | ------------- | ------------- |
 | ![alt text](https://github.com/crljvr/sr_clone_flutter/blob/main/assets/gifs/sr_play.gif?raw=true)      | ![alt text](https://github.com/crljvr/sr_clone_flutter/blob/main/assets/gifs/clone.gif?raw=true) |
+
+___
+
+### The UI Components Package
+ 
+All widgets wit SR Branding is kept in a single package called UI Components.
+This project is making use of [Widgetbook](https://github.com/widgetbook/widgetbook) and it allows for working and presenting the UI Components in an isolated environment before moving them over to the actual app.
+Work has now started moving already created Widgets to the UI Component package.
+
+![alt text](https://github.com/crljvr/sr_clone_flutter/blob/main/assets/gifs/ui_components.gif?raw=true)
