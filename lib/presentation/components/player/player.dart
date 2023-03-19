@@ -1,58 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
 import 'package:sr_clone_flutter/domain/extensions/double.dart';
-import 'package:sr_clone_flutter/domain/use_cases/player/get_player_content_use_case.dart';
-import 'package:sr_clone_flutter/domain/use_cases/player/pause_audio_use_case.dart';
-import 'package:sr_clone_flutter/domain/use_cases/player/play_audio_use_case.dart';
-import 'package:sr_clone_flutter/domain/use_cases/player/skip_backward_use_case.dart';
-import 'package:sr_clone_flutter/domain/use_cases/player/skip_forward_use_case.dart';
-import 'package:sr_clone_flutter/domain/use_cases/use_case.dart';
-import 'package:sr_clone_flutter/media_player.dart';
 import 'package:sr_clone_flutter/presentation/components/player/large_player.dart';
 import 'package:sr_clone_flutter/presentation/components/player/mini_player.dart';
 import 'package:sr_clone_flutter/presentation/components/player/player_content.dart';
+import 'package:sr_clone_flutter/presentation/components/player/player_view_model.dart';
 import 'package:sr_clone_flutter/presentation/providers/player_expanded_progression_provider.dart';
-
-class PlayerViewModel extends ChangeNotifier {
-  PlayerViewModel(this.playerContent) {
-    _getPlayerContentUseCase.call<NoGeneric>(NoParams()).listen((content) {
-      if (content == null) return;
-      playerContent = content;
-      notifyListeners();
-    });
-  }
-
-  final _mediaPlayer = GetIt.I<MediaPlayer>();
-  final _playAudioUseCase = GetIt.I<PlayAudioUseCase>();
-  final _pauseAudioUseCase = GetIt.I<PauseAudioUseCase>();
-  final _skipForwardUseCase = GetIt.I<SkipForwardUseCase>();
-  final _skipBackwardUseCase = GetIt.I<SkipBackwardUseCase>();
-  final _getPlayerContentUseCase = GetIt.I<GetPlayerContentUseCase>();
-
-  PlayerContent playerContent;
-
-  // USE CASE THIS
-  Stream<MediaPlayerData> get mediaPlayerDataStream => _mediaPlayer.getMediaPlayerDataStream();
-
-  Future<void> playAudio() async {
-    await _playAudioUseCase.call<NoGeneric>(NoParams());
-  }
-
-  Future<void> pauseAudio() async {
-    await _pauseAudioUseCase.call<NoGeneric>(NoParams());
-  }
-
-  Future<void> skipForward(int seconds) async {
-    await _skipForwardUseCase.call<NoGeneric>(seconds);
-  }
-
-  Future<void> skipBackward(int seconds) async {
-    await _skipBackwardUseCase.call<NoGeneric>(seconds);
-  }
-}
 
 class Player extends StatefulWidget {
   const Player({required this.viewModel, super.key});

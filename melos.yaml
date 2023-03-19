@@ -2,6 +2,7 @@ name: sr_clone_flutter
 
 packages:
   - packages/*
+  - "*"
 scripts:
   test:selective_unit_test:
     run: melos exec --dir-exists="test" --fail-fast -- flutter test --no-pub --coverage
